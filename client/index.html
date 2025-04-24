@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Random image</title>
+</head>
+<body>
+   <form>
+      <label for="input">Enter your email:</label><br>
+      <input type="email" id="input" placeholder="Enter email here" style="width: 100%; padding: 10px; margin-bottom: 20px;">
+      <button type="submit" style="padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Submit</button>
+   </form>
+   <h1>Random image</h1>
+   <img src="https://picsum.photos/1000/500" alt="Example Image" width="100%" height="50%">
+</body>
+<script>
+      document.addEventListener("DOMContentLoaded", function() {
+         const form = document.querySelector("form");
+         const input = document.getElementById("input");
+
+         form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const email = input.value;
+            if (email) {
+               try {
+               const response = await fetch(`http://localhost:3000/?email=${encodeURIComponent(email)}`, { method: "GET" });
+               if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+               }
+               const data = await response.json();
+               alert(`Name: ${data.name}\nCourse: ${data.course}\nGroup: ${data.group}`);
+            } catch (error) {
+               console.error("There was a problem with the fetch operation:", error);
+               alert("Error: Unable to fetch data. Please check the server or your input.");
+            }
+            } else {
+               alert("Please enter a valid email address.");
+            }
+         });
+      });
+   </script>
+</html>
